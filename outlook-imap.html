@@ -1,0 +1,30 @@
+<script type="text/javascript">
+    RED.nodes.registerType('outlook-imap', {
+        category: 'input',
+        color: '#a6bbcf',
+        defaults: {
+            name: { value: "" },
+            email: { value: "" },
+            token: { value: "msg.token" }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "email.png",
+        label: function() {
+            return this.name || "outlook-imap";
+        }
+    });
+</script>
+
+<div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+</div>
+<div class="form-row">
+    <label for="node-input-email"><i class="fa fa-envelope"></i> Email</label>
+    <input type="text" id="node-input-email" placeholder="Your Outlook Email">
+</div>
+<div class="form-row">
+    <label for="node-input-token"><i class="fa fa-key"></i> OAuth2 Token</label>
+    <input type="password" id="node-input-token" placeholder="OAuth2 Token">
+</div>
