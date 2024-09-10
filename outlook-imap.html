@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    RED.nodes.registerType('outlook-imap', {
+    RED.nodes.registerType('Outlook IMAP', {
         category: 'input',
         color: '#a6bbcf',
         defaults: {
@@ -10,11 +10,11 @@
         outputs: 1,
         icon: "email.png",
         label: function() {
-            return this.name || "outlook-imap";
+            return this.name || "Outlook IMAP";
         }
     });
 </script>
-<script type="text/html" data-template-name="outlook-imap">
+<script type="text/x-red" data-template-name="Outlook IMAP">
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -25,6 +25,6 @@
     </div>
     <div class="form-row">
         <label for="node-input-token"><i class="fa fa-key"></i> OAuth2 Token</label>
-        <input type="text" id="node-input-token" placeholder="OAuth2 Token" value="mgs.token" disabled>
+        <input type="text" id="node-input-token" placeholder="OAuth2 Token" value="msg.token" disabled>
     </div>
 </script>

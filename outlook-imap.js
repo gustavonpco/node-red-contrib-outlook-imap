@@ -51,7 +51,7 @@ module.exports = function(RED) {
         });
     }
     
-    RED.nodes.registerType("outlook-imap", OutlookIMAPNode, {
+    RED.nodes.registerType("Outlook IMAP", OutlookIMAPNode, {
         credentials: {
             email: { type: "text" }
         }
