@@ -1,59 +1,99 @@
-const Imap = require('imap-simple');
+const Imap = require('imap');
 const { simpleParser } = require('mailparser');
 
-module.exports = function(RED) {
+module.exports = function (RED) {
     function OutlookIMAPNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
 
-        const imapConfig = {
-            imap: {
-                user: config.email, 
-                xoauth2: msg.token, // O Token OAuth2 já provido
-                host: 'outlook.office365.com',
-                port: 993,
-                tls: true,
-                tlsOptions: { rejectUnauthorized: false },
-                authTimeout: 30000
-            }
-        };
+        const imap = new Imap({
+            user: config.email,
+            xoauth2: msg.token, // O token OAuth2 já provido
+            host: 'outlook.office365.com',
+            port: 993,
+            tls: true,
+            tlsOptions: { rejectUnauthorized: false }
+        });
 
-        node.on('input', function(msg) {
-            Imap.connect(imapConfig).then((connection) => {
-                return connection.openBox('INBOX').then(() => {
-                    const searchCriteria = ['UNSEEN'];
-                    const fetchOptions = { bodies: ['HEADER', 'TEXT'], markSeen: true };
+        function openInbox(cb) {
+            imap.openBox('INBOX', false, cb);
+        }
 
-                    return connection.search(searchCriteria, fetchOptions).then((messages) => {
-                        messages.forEach((item) => {
-                            const all = item.parts.find(part => part.which === 'TEXT');
-                            const id = item.attributes.uid;
-                            const idHeader = "Imap-Id: " + id + "\r\n";
-                            simpleParser(idHeader + all.body, (err, mail) => {
+        imap.once('ready', function () {
+            openInbox(function (err, box) {
+                if (err) {
+                    node.error("Erro ao abrir a caixa de entrada: " + err);
+                    return;
+                }
+                const searchCriteria = ['UNSEEN']; // E-mails não lidos
+                const fetchOptions = { bodies: '', markSeen: true };
+
+                imap.search(searchCriteria, function (err, results) {
+                    if (err) {
+                        node.error("Erro na busca de e-mails: " + err);
+                        return;
+                    }
+
+                    if (results.length === 0) {
+                        node.log("Nenhum e-mail não lido encontrado.");
+                        return;
+                    }
+
+                    const f = imap.fetch(results, fetchOptions);
+                    f.on('message', function (msg, seqno) {
+                        let emailBuffer = '';
+                        msg.on('body', function (stream) {
+                            stream.on('data', function (chunk) {
+                                emailBuffer += chunk.toString('utf8');
+                            });
+                        });
+
+                        msg.once('end', function () {
+                            simpleParser(emailBuffer, (err, mail) => {
                                 if (!err) {
-                                    msg.payload = {
+                                    node.log("E-mail recebido: " + mail.subject);
+                                    const emailData = {
                                         from: mail.from.text,
                                         subject: mail.subject,
                                         date: mail.date,
                                         body: mail.text
                                     };
-                                    node.send(msg);
+                                    node.send({ payload: emailData, original: mail });
                                 } else {
-                                    node.error("Error parsing mail: " + err);
+                                    node.error("Erro ao analisar e-mail: " + err);
                                 }
                             });
                         });
                     });
+
+                    f.once('error', function (err) {
+                        node.error("Erro ao buscar e-mails: " + err);
+                    });
+
+                    f.once('end', function () {
+                        node.log('Finalizada a busca de e-mails.');
+                        imap.end();
+                    });
                 });
-            }).catch(err => {
-                node.error("Error connecting to IMAP: " + err);
             });
         });
+
+        imap.once('error', function (err) {
+            node.error("Erro na conexão IMAP: " + err);
+        });
+
+        imap.once('end', function () {
+            node.log('Conexão IMAP encerrada.');
+        });
+
+        node.on('input', function (msg) {
+            imap.connect();
+        });
     }
-    
+
     RED.nodes.registerType("Outlook IMAP", OutlookIMAPNode, {
         credentials: {
             email: { type: "text" }
         }
     });
-}
+};
