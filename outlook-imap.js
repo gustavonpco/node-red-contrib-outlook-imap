@@ -1,5 +1,3 @@
-
-
 module.exports = function (RED) {
     "use strict";
     const Imap = require('imap');
@@ -94,7 +92,7 @@ module.exports = function (RED) {
         });
     }
     
-    RED.nodes.registerType("Outlook IMAP", OutlookIMAPNode, {
+    RED.nodes.registerType("outlook-imap", OutlookIMAPNode, {
         credentials: {
             email: { type: "text" }
         }
