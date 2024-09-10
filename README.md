@@ -6,24 +6,10 @@ Este nó personalizado captura e-mails não lidos da caixa de entrada do Outlook
 
 ## Instalação
 
-1. Clone ou faça o download deste repositório em seu diretório de nós personalizados do Node-RED:
+3. Instalação de pacote no Node-RED:
 
 ```bash
-cd ~/.node-red/nodes
-git clone https://github.com/gustavonpco/node-red-contrib-outlook-imap
-```
-
-2. Instale as dependências necessárias:
-
-```bash
-cd node-red-contrib-outlook-imap
-npm install
-```
-
-3. Reinicie o Node-RED:
-
-```bash
-node-red-restart
+npm i node-red-contrib-outlook-imap
 ```
 
 ## Configuração do Nó
