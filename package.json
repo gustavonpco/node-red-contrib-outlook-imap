@@ -11,11 +11,25 @@
     "email": "gustavo.napomuceno@gmail.com",
     "url": "https://www.linkedin.com/in/gustavonpco"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
+  "keywords": [
+    "node-red",
+    "email",
+    "gmail",
+    "imap",
+    "pop",
+    "smtp",
+    "smtp-server",
+    "mta"
+  ],
   "dependencies": {
     "imap-simple": "^6.0.0",
     "mailparser": "^3.6.7"
   },
+  "bundledDependencies": [
+    "imap-simple",
+    "mailparser"
+  ],
   "node-red": {
     "nodes": {
       "outlook-imap": "outlook-imap.js"
@@ -24,5 +38,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/gustavonpco/node-red-contrib-outlook-imap.git"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
