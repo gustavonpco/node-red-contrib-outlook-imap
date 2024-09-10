@@ -23,8 +23,8 @@
     "mta"
   ],
   "dependencies": {
-    "imap": "~0.8.17",
-    "mailparser": "~3.7.1"
+    "imap": "^0.8.17",
+    "mailparser": "^3.7.1"
   },
   "bundledDependencies": [
     "imap",

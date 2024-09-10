@@ -63,4 +63,4 @@ Contribuições são bem-vindas! Se você encontrar um problema ou tiver uma sug
 
 ## Licença
 
-Este projeto é licenciado sob a [MIT License](LICENSE).
+Este projeto é licenciado sob a [Apache License](LICENSE).
