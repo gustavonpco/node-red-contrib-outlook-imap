@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-outlook-imap",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "main": "outlook-imap.js",
   "description": "Node-RED node to capture emails from Outlook inbox using IMAP with OAuth2 token",
   "scripts": {
